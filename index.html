@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web3D Campaign Grid</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #222;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .card {
+      border: 2px solid #7ec242;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-content {
+      padding: 10px;
+    }
+
+    .card-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .card-subtitle {
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      width: 90%;
+      height: 90%;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .modal iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: #7ec242;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="campaignGrid"></div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">✕ Close</button>
+      <iframe id="modalFrame"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const campaigns = [
+      { title: "Lithuania", subtitle: "Category A", url: "https://needle-lith-tst.web.app/?room=633851", img: "https://github.com/AlexTour/Barrier-Leverage1/blob/main/Lithuania.png?raw=true" },
+      { title: "Austria", subtitle: "Category B", url: "https://example.com/3d2", img: "https://github.com/AlexTour/Barrier-Leverage1/blob/main/Lithuania.png?raw=true" },
+      { title: "3D Campaign 3", subtitle: "Category A", url: "https://example.com/3d3", img: "https://github.com/AlexTour/Barrier-Leverage1/blob/main/Lithuania.png?raw=true" },
+      { title: "3D Campaign 4", subtitle: "Category C", url: "https://example.com/3d4", img: "https://github.com/AlexTour/Barrier-Leverage1/blob/main/Lithuania.png?raw=true" }
+    ];
+
+    const grid = document.getElementById("campaignGrid");
+    const modal = document.getElementById("modal");
+    const modalFrame = document.getElementById("modalFrame");
+
+    campaigns.forEach(c => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${c.img}" alt="${c.title}">
+        <div class="card-content">
+          <div class="card-title">${c.title}</div>
+          <div class="card-subtitle">${c.subtitle}</div>
+        </div>
+      `;
+
+      card.addEventListener("click", () => {
+        modal.style.display = "flex";
+        modalFrame.src = c.url; // load 3D experience on demand
+      });
+
+      grid.appendChild(card);
+    });
+
+    function closeModal() {
+      modal.style.display = "none";
+      modalFrame.src = ""; // unload 3D scene
+    }
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+  </script>
+
+</body>
+</html>
